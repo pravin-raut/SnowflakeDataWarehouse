@@ -11,7 +11,7 @@ This repository contains the scripts, documentation, and resources for building 
 
 The project is structured around a modern data warehouse design, using Snowflake as the central warehousing solution. The architecture follows a staged approach:
 
-1. **Ingestion from OLTP System**: Data is ingested from an OLTP system, encompassing sales, customers, products, payment methods, and store locations.
+1. **Ingestion from OLTP System**: Data is ingested from an OLTP system to an object store, encompassing sales, customers, products, payment methods, and store locations.
 
 2. **Staging in Snowflake**: Data is then staged in Snowflake, retaining the structure and schema of the source OLTP system.
 
