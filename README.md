@@ -3,7 +3,12 @@
 ## Overview
 This repository contains the scripts, documentation, and resources for building a comprehensive data warehouse using Snowflake. It demonstrates an end-to-end solution from data ingestion from an OLTP system, through staging and transformation in Snowflake, to serving the data for BI and analytics purposes.
 
+## Low level Design
+
+![Snowflake-2023-10-28-052643](https://github.com/pravin-raut/SnowflakeDataWarehouse/assets/65663124/b2fb23b2-68bc-4784-a1fd-d29903aca629)
+
 ## Architecture
+
 The project is structured around a modern data warehouse design, using Snowflake as the central warehousing solution. The architecture follows a staged approach:
 
 1. **Ingestion from OLTP System**: Data is ingested from an OLTP system, encompassing sales, customers, products, payment methods, and store locations.
@@ -22,11 +27,4 @@ The project is structured around a modern data warehouse design, using Snowflake
 - `Transformation_Scripts`: SQL for transforming data into the core layer and data warehouse schema.
 - `BI_Setup`: Documentation and scripts for setting up BI tools and dashboards.
 
-## Usage
-Each folder contains specific instructions on how to use the scripts and set up the respective components of the data warehouse.
 
-## Contributing
-Contributions to the Snowflake Data Warehouse project are welcome! Please read through our contributing guidelines for more information on making pull requests.
-
-## License
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
