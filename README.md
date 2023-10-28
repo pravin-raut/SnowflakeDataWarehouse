@@ -5,7 +5,7 @@ This repository contains the scripts, documentation, and resources for building 
 
 ## Low level Design
 
-![Snowflake-2023-10-28-052643](https://github.com/pravin-raut/SnowflakeDataWarehouse/assets/65663124/b2fb23b2-68bc-4784-a1fd-d29903aca629)
+![Snowflake-2023-10-28-052040](https://github.com/pravin-raut/SnowflakeDataWarehouse/assets/65663124/e1f70fc2-b0e5-415b-8640-0cb228b77156)
 
 ## Architecture
 
