@@ -16,7 +16,7 @@ In this project, we explore various Snowflake features and capabilities, includi
 9. **Streams**: Capturing changes to data in tables using Snowflake Streams for real-time processing and analytics.
 10. **Fail-safe and Data Retention Policies**: Understanding and implementing data protection and retention policies in Snowflake.
 
-## Low-Level Design
+## Architecture Diagram
 
 ![Snowflake-2023-10-28-052040](https://github.com/pravin-raut/SnowflakeDataWarehouse/assets/65663124/e1f70fc2-b0e5-415b-8640-0cb228b77156)
 
