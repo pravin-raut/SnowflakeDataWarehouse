@@ -1,0 +1,6 @@
+PaymentId,PaymentMethod
+1,Credit Card
+2,Mobile Payment
+3,Debit Card
+4,Cash
+5,Online Transfer
