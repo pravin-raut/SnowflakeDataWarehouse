@@ -1,0 +1,65 @@
+/*
+
+The `COPY` command in Snowflake is very flexible and supports numerous parameters to control data loading behavior. Here's a summary of the key parameters, their default values, and their purposes:
+
+### Key Parameters:
+
+1. **`FILE_FORMAT`**
+   - **Default**: None (must be specified).
+   - **Description**: Specifies the file format for the input files (e.g., CSV, JSON, PARQUET).
+
+2. **`ON_ERROR`**
+   - **Default**: `'ABORT_STATEMENT'`.
+   - **Description**: Dictates the action when an error occurs. Options include:
+     - `'ABORT_STATEMENT'`: Stop the load operation upon the first error.
+     - `'CONTINUE'`: Continue loading even if errors occur.
+     - `'SKIP_FILE'`: Skip the file that caused an error.
+     - `'SKIP_FILE_<num>'`: Skip files after a specified number of errors.
+
+3. **`SIZE_LIMIT`**
+   - **Default**: None (no limit).
+   - **Description**: Limits the size of the data loaded (in bytes).
+
+4. **`PURGE`**
+   - **Default**: `FALSE`.
+   - **Description**: Whether to delete the files from the stage after successful loading.
+
+5. **`RETURN_FAILED_ONLY`**
+   - **Default**: `FALSE`.
+   - **Description**: Only return information on files that failed to load (useful with `ON_ERROR = 'CONTINUE'`).
+
+6. **`FORCE`**
+   - **Default**: `FALSE`.
+   - **Description**: Whether to force load files that have already been loaded.
+
+7. **`TRUNCATECOLUMNS`**
+   - **Default**: `FALSE`.
+   - **Description**: Truncates string columns to fit the target column size. If `FALSE`, an error is raised for oversized strings.
+
+8. **`VALIDATION_MODE`**
+   - **Default**: `'RETURN_ALL_ERRORS'`.
+   - **Description**: Specifies how data validation errors are handled. Can be `'RETURN_ALL_ERRORS'` or `'RETURN_n_ROWS'`.
+
+9. **`MATCH_BY_COLUMN_NAME`**
+   - **Default**: `FALSE`.
+   - **Description**: Matches source and target columns by name rather than by position.
+
+10. **`COPY_GRANTS`**
+    - **Default**: `FALSE`.
+    - **Description**: Copies the ACL from the source file to the target table.
+
+11. **`EMPTY_FIELD_AS_NULL`**
+    - **Default**: `TRUE`.
+    - **Description**: Treats empty CSV fields as NULLs.
+
+12. **`ENFORCE_LENGTH`**
+    - **Default**: `TRUE`.
+    - **Description**: Enforces the maximum length of string columns. An error is raised if this length is exceeded.
+
+13. **`STRIP_NULL_VALUES`**
+    - **Default**: `FALSE`.
+    - **Description**: Strips NULL values from the input data.
+
+### Usage Note:
+These parameters allow precise control of the data loading process, but not all combinations of parameters are applicable or meaningful. It's essential to choose parameters that align with your specific data loading requirements and the nature of your data. For detailed information and any updates, always refer to the [Snowflake documentation](https://docs.snowflake.com/en/sql-reference/sql/copy-into-table.html).
+*/
