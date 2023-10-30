@@ -34,22 +34,4 @@ The project is structured around a modern data warehouse design, using Snowflake
 
 5. **BI and Analytics**: Finally, data is made available for BI tools and analytics platforms, enabling business intelligence, reporting, and decision-making.
 
-## Project Files
-- `OLTP_Export_Scripts`: Scripts to export data from the OLTP system.
-- `Staging_Scripts`: SQL scripts for staging the data in Snowflake.
-- `Transformation_Scripts`: SQL for transforming data into the core layer and data warehouse schema.
-- `BI_Setup`: Documentation and scripts for setting up BI tools and dashboards.
-- `Feature_Implementation`: Detailed examples and scripts showcasing the implementation of Snowflake features such as SnowPipe, Tasks, Streams, Time Travel, etc.
 
-## Installation and Setup
-Instructions for setting up the Snowflake environment, including creating databases, schemas, and necessary integrations.
-
-## Usage
-Guidelines on how to use the scripts and implement the features in your own Snowflake environment.
-
-## Contributing
-Information on how to contribute to this project, including coding standards, pull requests, and issue reporting.
-
----
-
-Feel free to add or modify any sections as needed to match your project's scope and details.
