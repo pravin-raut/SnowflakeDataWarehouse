@@ -1,88 +1,56 @@
-use database retail;
-use schema stg;
+USE DATABASE RETAIL;
+USE SCHEMA STG;
 
-COPY INTO stg_Payment (PaymentMethod,PaymentId)
+-- Copy data from an external stage into the stg_Payment table.
+COPY INTO stg_Payment (PaymentMethod, PaymentId)
 FROM (
     SELECT s.$1, s.$2
     FROM @my_external_stage/payment/ s
 )
-FILE_FORMAT = (FORMAT_NAME = csv_format)
+FILE_FORMAT = (FORMAT_NAME = csv_format);
 
+-- Select all records from stg_Payment.
+SELECT * FROM stg_Payment;
 
+-- Update the payment method in stg_Payment to 'Cash'.
+UPDATE stg_Payment
+SET PaymentMethod = 'Cash';
 
-select * from stg_Payment
+-- Demonstrating Time Travel to query historical data using different methods.
+-- Method 1: Using an OFFSET to go back 1 hour.
+SELECT * FROM stg_Payment AT (OFFSET => -60*60);
 
-update stg_Payment
-set paymentmethod='Cash'
+-- Method 2: Using a specific timestamp.
+SELECT * FROM stg_Payment BEFORE (TIMESTAMP => '2023-10-28 22:00:00'::TIMESTAMP);
 
--- enterprise edition we can travel 90 days
---Method1
-select * from stg_Payment at( OFFSET => -60*60)
+-- Method 3: Using the statement ID of the update query.
+SELECT * FROM stg_payment BEFORE (STATEMENT => '01aff738-0000-2a08-0000-5de90001010a');
 
---Method2
+-- Resetting the stg_Payment table to its state before the update.
+TRUNCATE TABLE stg_payment;
+INSERT INTO stg_payment
+SELECT * FROM stg_payment BEFORE (STATEMENT => '01aff738-0000-2a08-0000-5de90001010a');
 
-select * from stg_Payment before (timestamp => '2023-10-28 22:00:00'::timestamp)
+-- Demonstrating the DROP and UNDROP commands.
+DROP TABLE stg_payment;
+UNDROP TABLE stg_payment;
 
---method 3( Query id of update)
-select * from stg_payment before (statement => '01aff738-0000-2a08-0000-5de90001010a')
+-- Showing how to view and alter the data retention time of a table.
+SHOW TABLES LIKE 'stg_payment';
+ALTER TABLE stg_payment SET DATA_RETENTION_TIME_IN_DAYS = 2;
 
-
-
--- Bad practice
---to create table again with create or replace table
-truncate table stg_payment
-insert into stg_payment
-select * from stg_payment before (statement => '01aff738-0000-2a08-0000-5de90001010a')
-
-drop table stg_payment
-
-undrop table stg_payment
-
--- we can drop and undrop schema and databases
-
---even if we do create or replace we can first alter the table with new name and execute undrop table 
-
-/*
---Retention time
-
-Standard edition -1 day
-Enterprise -90 days
-business critical -90 days
-virtual privcate -90 dayas
-
-*/
---default retention is 1 day
-show tables like'stg_payment'
-
--- ALter table
-Alter table stg_payment set DATA_RETENTION_TIME_IN_DAYS=2
---if we set to 0 we cannot undrop
-
-CREATE or replace TABLE stg_Payment (
+-- Re-creating the stg_Payment table with data retention settings.
+CREATE OR REPLACE TABLE stg_Payment (
     PaymentId INT,
     PaymentMethod VARCHAR(50)
 )
-DATA_RETENTION
-;
+DATA_RETENTION_TIME_IN_DAYS = 2;
 
+-- Querying Snowflake storage usage.
+SELECT * FROM snowflake.account_usage.storage_usage;
+SELECT * FROM snowflake.account_usage.table_storage_metrics;
 
+-- Understanding Fail-Safe in Snowflake.
 /*
-Time Travel cost
-
-
-*/
-
-select * from snowflake.account_usage.storage_usage 
-
-select * from snowflake.account_usage.table_storage_metrics
-
-
-
-/*
-Understanding Fail Safe
-1. Protection of historical data in case of disaster
-2. NOn configuratble 7 days period for permamnet tables
-3. period start after time travel period has ended
-4. Recoverable only by snowflake
-5. Contribute to storage coset
+   Fail-Safe is a non-configurable, additional 7-day period of data protection beyond the Time Travel period. It is only accessible by Snowflake Support for disaster recovery and contributes to storage costs.
 */

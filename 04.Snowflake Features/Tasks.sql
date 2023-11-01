@@ -1,35 +1,34 @@
-use database retail;
-use schema stg;
+USE DATABASE RETAIL;
+USE SCHEMA STG;
 
-create or replace table customers
-(
-
-customer_id int autoincrement start=1 ,increment=1,
-first_name varchar(40) default 'Pravin',
-create_timestamp timestamp
+-- Creating a customers table with an autoincrementing ID, a default first name, and a timestamp.
+CREATE OR REPLACE TABLE customers (
+  customer_id INT AUTOINCREMENT START=1 INCREMENT=1,
+  first_name VARCHAR(40) DEFAULT 'Pravin',
+  create_timestamp TIMESTAMP
 );
 
-create or replace table customers2
-(
-
-customer_id int autoincrement start=1 ,increment=1,
-first_name varchar(40) default 'akshata',
-create_timestamp timestamp
-);
-create or replace table customers3
-(
-
-customer_id int autoincrement start=1 ,increment=1,
-first_name varchar(40) default 'akshata',
-create_timestamp timestamp
+-- Creating a second customers table with similar structure but a different default first name.
+CREATE OR REPLACE TABLE customers2 (
+  customer_id INT AUTOINCREMENT START=1 INCREMENT=1,
+  first_name VARCHAR(40) DEFAULT 'akshata',
+  create_timestamp TIMESTAMP
 );
 
-create table  process
-(
-id int
+-- Creating a third customers table, same as the second.
+CREATE OR REPLACE TABLE customers3 (
+  customer_id INT AUTOINCREMENT START=1 INCREMENT=1,
+  first_name VARCHAR(40) DEFAULT 'akshata',
+  create_timestamp TIMESTAMP
 );
-insert into process values (1)
 
+-- Creating a process table for controlling the task execution.
+CREATE TABLE process (
+  id INT
+);
+INSERT INTO process VALUES (1);
+
+-- Does not work with a table in when clause
 CREATE OR REPLACE TASK customer_insert
   WAREHOUSE = compute_wh
   SCHEDULE = '1 MINUTE'
@@ -41,38 +40,33 @@ AS
   INSERT INTO customers(create_timestamp)
   VALUES(CURRENT_TIMESTAMP);
 
+-- Creating another task with a specific CRON schedule.
+CREATE OR REPLACE TASK cusomter_insert_new
+  WAREHOUSE = compute_wh
+  SCHEDULE = 'USING CRON 6-8 21 * * 1-5 UTC';
+SHOW TASKS;
 
+-- Resuming and suspending the first task.
+ALTER TASK customer_insert RESUME;
+ALTER TASK customer_insert SUSPEND;
 
-create or replace task cusomter_insert_new
-warehouse=compute_wh
-schedule='using CRON 6-8 21 * * 1-5 UTC'
-show tasks;
+-- Selecting all records from the customers table to view the inserted data.
+SELECT * FROM customers;
 
-Alter task customer_insert resume;
-Alter task customer_insert suspend;
+-- Creating a chained task that runs after 'customer_insert' and inserts data from customers into customers2.
+CREATE OR REPLACE TASK customer_insert2
+  WAREHOUSE = compute_wh
+  AFTER customer_insert
+AS
+  INSERT INTO customers2 SELECT * FROM customers;
 
+-- Creating another chained task that runs after both 'customer_insert' and 'customer_insert2', copying data from customers2 to customers3.
+CREATE OR REPLACE TASK customer_insert3
+  WAREHOUSE = compute_wh
+  AFTER customer_insert, customer_insert2
+AS
+  INSERT INTO customers3 SELECT * FROM customers2;
 
-select * from customers
-
-Alter task customer_insert2 resume;
-Alter task customer_insert2 suspend;
-
-create or replace task customer_insert2
-warehouse=compute_wh
-After customer_insert
-as
-INSERT INTO customers2 select * from customers
-
-create or replace task customer_insert3
-warehouse=compute_wh
-After customer_insert,customer_insert2
-as
-INSERT INTO customers3 select * from customers2
-
-
--- 1 parent task
--- Nested task can be upto 100
--- 1 parent can have upto 1000 child
-
-show tasks
-select * from customers2
+-- Display all existing tasks and the current data in the customers2 table.
+SHOW TASKS;
+SELECT * FROM customers2;
